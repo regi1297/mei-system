@@ -60,6 +60,10 @@ const Metas = () => {
     }
   };
 
+  const formatarValorReal = (valor) => {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
+  };
+
   const handleCadastroSucesso = () => {
     fetchMetas(); // Atualiza a lista de metas após o cadastro
   };
@@ -73,13 +77,15 @@ const Metas = () => {
           <TableRow>
             <TableCell>Descrição</TableCell>
             <TableCell>Prazo</TableCell>
+            <TableCell>Valor</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {metas.map((meta) => (
             <TableRow key={meta.id}>
-              <TableCell>{meta.descricao}</TableCell>
+              <TableCell>{meta.meta}</TableCell>
               <TableCell>{new Date(meta.prazo).toLocaleDateString()}</TableCell>
+              <TableCell>{formatarValorReal(meta.valor)}</TableCell>
             </TableRow>
           ))}
         </TableBody>

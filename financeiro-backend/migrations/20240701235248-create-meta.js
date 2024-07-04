@@ -15,6 +15,12 @@ module.exports = {
       valor: {
         type: Sequelize.FLOAT
       },
+      prazo: {
+        type: Sequelize.DATE
+      },
+      concluida: {
+        type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

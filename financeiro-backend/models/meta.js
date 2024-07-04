@@ -15,7 +15,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   Meta.init({
     meta: DataTypes.STRING,
-    valor: DataTypes.FLOAT
+    valor: DataTypes.FLOAT,
+    prazo: DataTypes.DATE,
   }, {
     sequelize,
     modelName: 'Meta',

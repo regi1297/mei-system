@@ -36,22 +36,25 @@ const Button = styled.button`
 `;
 
 const FormCadastroMetas = ({ onCadastroSucesso }) => {
-  const [descricao, setDescricao] = useState('');
+  const [meta, setMeta] = useState('');
   const [prazo, setPrazo] = useState('');
+  const [valor, setValor] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
       const response = await api.post('/metas', {
-        descricao,
+        meta,
         prazo,
+        valor,  
       });
       console.log('Cadastro de meta realizado com sucesso:', response.data);
       onCadastroSucesso(); // Função passada por props para atualizar a lista após o cadastro
       // Limpar campos do formulário após o cadastro
-      setDescricao('');
+      setMeta('');
       setPrazo('');
+      setValor('');
     } catch (error) {
       console.error('Erro ao cadastrar meta:', error);
     }
@@ -61,11 +64,15 @@ const FormCadastroMetas = ({ onCadastroSucesso }) => {
     <Form onSubmit={handleSubmit}>
       <FormGroup>
         <Label>Descrição:</Label>
-        <Input type="text" value={descricao} onChange={(e) => setDescricao(e.target.value)} required />
+        <Input type="text" value={meta} onChange={(e) => setMeta(e.target.value)} required />
       </FormGroup>
       <FormGroup>
         <Label>Prazo:</Label>
         <Input type="date" value={prazo} onChange={(e) => setPrazo(e.target.value)} required />
+      </FormGroup>
+      <FormGroup>
+        <Label>Valor:</Label>
+        <Input type="number" value={valor} onChange={(e) => setValor(e.target.value)} required />
       </FormGroup>
       <Button type="submit">Cadastrar Meta</Button>
     </Form>
