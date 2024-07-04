@@ -68,6 +68,15 @@ const Metas = () => {
     fetchMetas(); // Atualiza a lista de metas após o cadastro
   };
 
+  const handleConcluirMeta = async (id) => {
+    try {
+      await api.patch(`/metas/${id}/concluir`);
+      setMetas(metas.filter(meta => meta.id !== id));
+    } catch (error) {
+      console.error('Failed to mark meta as completed:', error);
+    }
+  };
+
   return (
     <Container>
       <PageTitle>Metas</PageTitle>
@@ -78,14 +87,22 @@ const Metas = () => {
             <TableCell>Descrição</TableCell>
             <TableCell>Prazo</TableCell>
             <TableCell>Valor</TableCell>
+            <TableCell>Concluído</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {metas.map((meta) => (
+          {metas.filter(meta => !meta.concluido).map((meta) => (
             <TableRow key={meta.id}>
               <TableCell>{meta.meta}</TableCell>
               <TableCell>{new Date(meta.prazo).toLocaleDateString()}</TableCell>
               <TableCell>{formatarValorReal(meta.valor)}</TableCell>
+              <TableCell>
+                <input 
+                  type="checkbox" 
+                  checked={meta.concluido}
+                  onChange={() => handleConcluirMeta(meta.id)} 
+                />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

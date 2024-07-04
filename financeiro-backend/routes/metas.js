@@ -14,13 +14,33 @@ module.exports = app => {
 
   app.put('/metas/:id', async (req, res) => {
     const meta = await Meta.findByPk(req.params.id);
-    meta.update(req.body);
-    res.json(meta);
+    if (meta) {
+      await meta.update(req.body);
+      res.json(meta);
+    } else {
+      res.status(404).json({ error: 'Meta not found' });
+    }
   });
 
   app.delete('/metas/:id', async (req, res) => {
     const meta = await Meta.findByPk(req.params.id);
-    meta.destroy();
-    res.json({ success: true });
+    if (meta) {
+      await meta.destroy();
+      res.json({ success: true });
+    } else {
+      res.status(404).json({ error: 'Meta not found' });
+    }
+  });
+
+  // Nova rota para marcar uma meta como concluída
+  app.patch('/metas/:id/concluir', async (req, res) => {
+    const meta = await Meta.findByPk(req.params.id);
+    if (meta) {
+      meta.concluido = true;
+      await meta.save();
+      res.json(meta);
+    } else {
+      res.status(404).json({ error: 'Meta not found' });
+    }
   });
 };

@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
     meta: DataTypes.STRING,
     valor: DataTypes.FLOAT,
     prazo: DataTypes.DATE,
+    concluido: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   }, {
     sequelize,
     modelName: 'Meta',
