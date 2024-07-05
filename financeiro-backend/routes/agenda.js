@@ -23,4 +23,16 @@ module.exports = app => {
     agenda.destroy();
     res.json({ success: true });
   });
+
+  // Nova rota para marcar um evento como concluído
+  app.patch('/agenda/:id/concluir', async (req, res) => {
+    const agenda = await Agenda.findByPk(req.params.id);
+    if (agenda) {
+      agenda.concluido = true;
+      await agenda.save();
+      res.json(agenda);
+    } else {
+      res.status(404).json({ error: 'Agenda not found' });
+    }
+  });
 };

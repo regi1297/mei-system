@@ -15,7 +15,11 @@ module.exports = (sequelize, DataTypes) => {
   }
   Agenda.init({
     evento: DataTypes.STRING,
-    data: DataTypes.DATE
+    data: DataTypes.DATE,
+    concluido: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   }, {
     sequelize,
     modelName: 'Agenda',

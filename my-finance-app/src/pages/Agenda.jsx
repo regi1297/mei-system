@@ -44,6 +44,18 @@ const TableCell = styled.td`
   border-bottom: 1px solid #ccc;
 `;
 
+const Button = styled.button`
+  padding: 8px 12px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  &:hover {
+    background-color: #218838;
+  }
+`;
+
 const Agenda = () => {
   const [eventos, setEventos] = useState([]);
 
@@ -64,6 +76,15 @@ const Agenda = () => {
     fetchEventos(); // Atualiza a lista de eventos após o cadastro
   };
 
+  const handleConcluirEvento = async (id) => {
+    try {
+      await api.patch(`/agenda/${id}/concluir`);
+      setEventos(eventos.filter(evento => evento.id !== id));
+    } catch (error) {
+      console.error('Failed to mark evento as completed:', error);
+    }
+  };
+
   return (
     <Container>
       <PageTitle>Agenda</PageTitle>
@@ -73,13 +94,17 @@ const Agenda = () => {
           <TableRow>
             <TableCell>Evento</TableCell>
             <TableCell>Data</TableCell>
+            <TableCell>Ações</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {eventos.map((evento) => (
+          {eventos.filter(evento => !evento.concluido).map((evento) => (
             <TableRow key={evento.id}>
               <TableCell>{evento.evento}</TableCell>
               <TableCell>{new Date(evento.data).toLocaleString()}</TableCell>
+              <TableCell>
+                <Button onClick={() => handleConcluirEvento(evento.id)}>Concluir</Button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
