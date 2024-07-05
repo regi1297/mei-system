@@ -1,5 +1,5 @@
 // src/components/FormCadastroDivida.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../api';
 import styled from 'styled-components';
 
@@ -27,6 +27,14 @@ const Input = styled.input`
   border-radius: 4px;
 `;
 
+const Select = styled.select`
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 5px;
+`;
+
 const Button = styled.button`
   background-color: #007bff;
   color: #fff;
@@ -41,20 +49,47 @@ const Button = styled.button`
 
 const FormCadastroDivida = ({ onCadastroSucesso }) => {
   const [credor, setCredor] = useState('');
+  const [novoCredor, setNovoCredor] = useState('');
   const [dataInicial, setDataInicial] = useState('');
   const [valorParcela, setValorParcela] = useState('');
   const [numParcelas, setNumParcelas] = useState('');
   const [juros, setJuros] = useState('');
   const [motivo, setMotivo] = useState('');
+  const [credores, setCredores] = useState([]);
+
+  useEffect(() => {
+    fetchCredores();
+  }, []);
+
+  const fetchCredores = async () => {
+    try {
+      const response = await api.get('/dividas');
+      const credoresExistentes = [...new Set(response.data.map(divida => divida.credor))];
+      setCredores(credoresExistentes);
+    } catch (error) {
+      console.error('Failed to fetch credores:', error);
+    }
+  };
+
+  const handleCredorChange = (e) => {
+    setCredor(e.target.value);
+    setNovoCredor('');  // Limpa o campo de novo credor se um credor existente for selecionado
+  };
+
+  const handleNovoCredorChange = (e) => {
+    setNovoCredor(e.target.value);
+    setCredor('novo');  // Define o credor como "novo" se algo for digitado no campo de novo credor
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    
     const valorTotal = parseFloat(valorParcela) * parseInt(numParcelas) * (1 + parseFloat(juros) / 100);
+    const credorFinal = credor === 'novo' ? novoCredor : credor;
 
     try {
       const response = await api.post('/dividas', {
-        credor,
+        credor: credorFinal,
         data_inicial: dataInicial,
         valor_parcela: parseFloat(valorParcela),
         num_parcelas: parseInt(numParcelas),
@@ -65,6 +100,12 @@ const FormCadastroDivida = ({ onCadastroSucesso }) => {
 
       console.log('Cadastro de dívida realizado com sucesso:', response.data);
       onCadastroSucesso(); // Atualiza a lista de dívidas após o cadastro
+
+      // Adiciona o novo credor à lista de credores se não estiver presente
+      if (credor === 'novo' && !credores.includes(novoCredor)) {
+        setCredores([...credores, novoCredor]);
+      }
+
       limparFormulario(); // Limpa o formulário após o cadastro
     } catch (error) {
       console.error('Erro ao cadastrar dívida:', error);
@@ -73,6 +114,7 @@ const FormCadastroDivida = ({ onCadastroSucesso }) => {
 
   const limparFormulario = () => {
     setCredor('');
+    setNovoCredor('');
     setDataInicial('');
     setValorParcela('');
     setNumParcelas('');
@@ -84,7 +126,16 @@ const FormCadastroDivida = ({ onCadastroSucesso }) => {
     <Form onSubmit={handleSubmit}>
       <FormGroup>
         <Label>Credor:</Label>
-        <Input type="text" value={credor} onChange={(e) => setCredor(e.target.value)} required />
+        <Select value={credor} onChange={handleCredorChange} required>
+          <option value="">Opção</option>
+          {credores.map((c, index) => (
+            <option key={index} value={c}>{c}</option>
+          ))}
+          <option value="novo">Novo Credor</option>
+        </Select>
+        {credor === 'novo' && (
+          <Input type="text" placeholder="Novo credor" value={novoCredor} onChange={handleNovoCredorChange} required />
+        )}
       </FormGroup>
       <FormGroup>
         <Label>Data Inicial:</Label>
