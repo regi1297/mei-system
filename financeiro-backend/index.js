@@ -16,6 +16,8 @@ require('./routes/orcamento')(app);
 require('./routes/controleSemanal')(app);
 require('./routes/metas')(app);
 require('./routes/agenda')(app);
+require('./routes/auth')(app);
+require('./routes/receitas')(app);
 
 const PORT = process.env.PORT || 3000;
 
