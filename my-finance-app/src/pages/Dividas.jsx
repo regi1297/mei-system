@@ -94,7 +94,7 @@ const Dividas = () => {
 
   return (
     <Container>
-      <PageTitle>Dívidas</PageTitle>
+      <PageTitle>Despesas</PageTitle>
       <FormCadastroDivida onCadastroSucesso={handleCadastroSucesso} />
       <Table>
         <TableHead>

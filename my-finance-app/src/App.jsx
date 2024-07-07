@@ -24,7 +24,7 @@ const App = () => {
       <nav>
         <ul>
           <li><Link to="/">Dashboard</Link></li>
-          <li><Link to="/dividas">Dívidas</Link></li>
+          <li><Link to="/dividas">Despesas</Link></li>
           <li><Link to="/orcamento">Orçamento</Link></li>
           <li><Link to="/controle-semanal">Controle Semanal</Link></li>
           <li><Link to="/metas">Metas</Link></li>
