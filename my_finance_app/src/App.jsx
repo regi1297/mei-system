@@ -41,7 +41,6 @@ const App = () => {
           <Route path="/orcamento" element={<Orcamento />} />
           <Route path="/controle-semanal" element={<ControleSemanal />} />
           <Route path="/agenda" element={<Agenda />} />
-
         </Routes>
       </Container>
     </Router>
