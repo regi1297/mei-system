@@ -3,7 +3,7 @@
     "username": "root",
     "password": "Regi_183",
     "database": "financeiro",
-    "host": "127.0.0.1",
+    "host": "152.67.63.42",
     "dialect": "mysql"
   },
   "test": {
